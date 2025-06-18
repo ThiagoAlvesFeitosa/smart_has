@@ -1,21 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:provider/provider.dart';
 
 import 'providers/auth_provider.dart';
 import 'providers/sensor_provider.dart';
 
 import 'screens/auth/login_screen.dart';
-import 'screens/auth/register_screen.dart';
 import 'screens/home/home_screen.dart';
 import 'screens/map/map_screen.dart';
-import 'screens/sensors/sensor_screen.dart';
-import 'screens/profile/profile_screen.dart';
 import 'screens/notifications/notification_screen.dart';
+import 'screens/profile/profile_screen.dart';
+import 'screens/sensors/sensor_screen.dart';
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print('Mensagem recebida em segundo plano: ${message.messageId}');
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+
+  print('Permissão concedida: ${settings.authorizationStatus}');
+
+  final fcmToken = await messaging.getToken();
+  print('FCM Token: $fcmToken');
+
   runApp(const MyApp());
 }
 
@@ -56,6 +77,34 @@ class _RootState extends State<Root> {
   void initState() {
     super.initState();
     checkAuth();
+    setupFirebaseMessaging();
+  }
+
+  void setupFirebaseMessaging() {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      if (message.notification != null) {
+        final title = message.notification?.title ?? '';
+        final body = message.notification?.body ?? '';
+
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(title),
+            content: Text(body),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('Usuário clicou na notificação');
+    });
   }
 
   void checkAuth() async {
@@ -136,26 +185,6 @@ class _MainNavigationState extends State<MainNavigation> {
             label: 'Perfil',
           ),
         ],
-      ),
-    );
-  }
-}
-
-class PlaceholderScreen extends StatelessWidget {
-  final String title;
-  const PlaceholderScreen({super.key, required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Tela $title'),
-      ),
-      body: Center(
-        child: Text(
-          'Tela "$title" ainda não implementada.',
-          style: const TextStyle(fontSize: 20),
-        ),
       ),
     );
   }

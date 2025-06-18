@@ -1,46 +1,49 @@
-# Smart HAS
+# Smart HAS - Global Solution FIAP 🌎🏡
 
-Aplicativo de Automação Residencial Inteligente.
+Aplicativo desenvolvido para o projeto **Global Solution da FIAP**, na temática de **Sociedade 5.0**, integrando soluções de **IoT, sensoriamento e monitoramento inteligente de ambientes residenciais**.
 
-## 📱 Sobre o projeto
-O Smart HAS é um aplicativo mobile desenvolvido em Flutter, integrado com Firebase e API OpenWeather. Ele permite que usuários cadastrem, monitorem e visualizem sensores IoT (como termostatos) de sua residência em tempo real.
+## 📱 Descrição
 
-Este projeto foi desenvolvido como parte do **Global Solution - FIAP 2025**, promovendo soluções inteligentes alinhadas aos conceitos da **Sociedade 5.0**.
+O Smart HAS permite que os usuários:
 
-## 🔥 Funcionalidades
-- Autenticação de usuários com Firebase.
-- Cadastro de sensores vinculados a cada usuário.
-- Personalização do nome dos sensores.
-- Dados de temperatura e umidade em tempo real (API OpenWeather).
-- Visualização dos sensores no mapa com localização, temperatura e umidade.
-- Tela de notificações simuladas com alertas sobre sensores.
-- Tela de perfil com informações do usuário e logout.
-- Regras de segurança no Firestore garantindo que cada usuário veja apenas seus próprios sensores.
+- 🔥 Cadastrem sensores IoT (temperatura, umidade, etc.).
+- 📊 Acompanhem em tempo real os dados de sensores vinculados.
+- 🌍 Visualizem sensores no mapa.
+- 🔔 Recebam alertas e notificações via Firebase Cloud Messaging (FCM).
+- 🔐 Autentiquem-se de forma segura com login e cadastro via Firebase Auth.
+- ⚙️ Gerenciem seus próprios dispositivos de forma individual e segura.
 
-## 🚀 Tecnologias utilizadas
-- Flutter
-- Dart
-- Firebase Authentication
-- Firebase Firestore
-- OpenWeather API
-- Provider (gerenciamento de estado)
-- Flutter Map (OpenStreetMap)
+---
 
-## 🗺️ Funcionalidade do mapa
-- Sensores aparecem como marcadores no mapa.
-- Exibe nome, temperatura e umidade diretamente no marcador.
-- Atualização dos dados climáticos em tempo real.
+## 🚀 Tecnologias Utilizadas
 
-## 🔒 Segurança e privacidade
-- Cada usuário acessa apenas os sensores que ele cadastrou.
-- Regras do Firestore:
+- **Flutter** (Dart)
+- **Firebase Auth**
+- **Firebase Firestore**
+- **Firebase Cloud Messaging (Notificações)**
+- **Google Maps API + flutter_map**
+- **Provider (Gerenciamento de estado)**
+- **Dio (HTTP Requests)**
+- **Geolocator + Geocoding**
+- **Android SDK**
 
-```plaintext
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /sensores/{document} {
-      allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
-    }
-  }
-}
+---
+
+## 🛠️ Instalação e Execução Local
+
+### ✅ Pré-requisitos:
+
+- Flutter instalado (`>=3.8.0`)
+- Java 17
+- Gradle 8.5+
+- Android Studio (preferencialmente fora do snap)
+
+### 🔥 Comandos:
+
+```bash
+git clone https://github.com/ThiagoAlvesFeitosa/smart_has.git
+cd smart_has
+
+flutter pub get
+flutter clean
+flutter run
