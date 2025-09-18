@@ -1,4 +1,4 @@
-# Dispositivos IoT 🌎🏡
+# Global Solution 1 - Dispositivos IoT 🌎🏡 (2025)
 
 Aplicativo desenvolvido para o projeto **Global Solution da FIAP**, na temática de **Sociedade 5.0**, integrando soluções de **IoT, sensoriamento e monitoramento inteligente de ambientes residenciais**.
 
